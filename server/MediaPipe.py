@@ -89,6 +89,19 @@ def upload_tile_image():
     create_tile("Resources/tile_base.png")
     return jsonify({"status": "Tile image uploaded"}), 200
 
+@app.route("/save_pattern", methods=["POST"])
+def save_pattern():
+    global tiled_image
+
+    # Define common image file extensions
+    image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"}
+    # Count the number of image files in the folder
+    image_count = sum(1 for file in os.listdir("Resources/Shirts") if os.path.splitext(file)[1].lower() in image_extensions)
+    imageFileName = f"T-Shirt_{image_count + 1}.png"
+
+    tiled_image.save(f"Resources/Shirts/{imageFileName}")
+    return jsonify({"status": "Tile image saved"}), 200
+
 shirtFolderPath = "Resources/Shirts"
 listShirts = os.listdir(shirtFolderPath)
 fixedRatio = 262 / 190
@@ -280,14 +293,23 @@ def handle_connect():
     emit('message', {'data': 'Connected to MediaPipe backend'})
 
 from pattern import pattern
+from io import BytesIO
+import base64
+tiled_image = None
 
 @socketio.on("tile_size")
 def handle_tile_size(data):
+    global tiled_image
     tile_x = data.get('tile_x', 3)
     tile_y = data.get('tile_y', 3)
 
     tiled_image = pattern("Resources/tile_image.png", tile_x, tile_y)
-    emit('tiled_image', tiled_image)
+
+    buffer = BytesIO()
+    tiled_image.save(buffer, format="PNG")
+    img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+    emit('tiled_image', img_str)
     
 
 def stream_video():
