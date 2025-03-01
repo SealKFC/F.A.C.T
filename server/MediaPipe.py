@@ -33,7 +33,7 @@ app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")  # Allow cross-origin requests
 
-with open(r'C:\Users\rhima\HackathonCS6\server\models\deadlift.pkl', 'rb') as f:
+with open(r'models/deadlift.pkl', 'rb') as f:
     model = pickle.load(f, encoding='bytes')
 
 # Landmarking
