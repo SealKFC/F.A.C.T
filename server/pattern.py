@@ -1,22 +1,34 @@
 from PIL import Image
+from io import BytesIO
+import base64
 
-# Load the user's image
-image = Image.open("C:\\Users\\tyrar\\OneDrive\\Desktop\\Hackathon2025\\seamless_texture.png").convert("RGBA")
+def pattern(filename, tile_x, tile_y):
 
-# Define the new size (increase size by repeating pattern)
-tile_x = 3  # Number of times to repeat horizontally
-tile_y = 3  # Number of times to repeat vertically
+    # Load the user's image
+    image = Image.open(filename).convert("RGBA")
 
-# Create a new blank image with the scaled size
-new_width = image.width * tile_x
-new_height = image.height * tile_y
-new_image = Image.new("RGB", (new_width, new_height))
+    # Define the new size (increase size by repeating pattern)
+    # tile_x = 3  # Number of times to repeat horizontally
+    # tile_y = 3  # Number of times to repeat vertically
 
-# Tile the original image
-for i in range(tile_x):
-    for j in range(tile_y):
-        new_image.paste(image, (i * image.width, j * image.height))
+    tile_x = int(tile_x)
+    tile_y = int(tile_y)
 
-# Show and save the new image
-new_image.show()
-new_image.save("C:\\Users\\tyrar\\OneDrive\\Desktop\\Hackathon2025\\tiled_image.jpg")
+    # Create a new blank image with the scaled size
+    new_width = image.width * tile_x
+    new_height = image.height * tile_y
+    new_image = Image.new("RGB", (new_width, new_height))
+
+    # Tile the original image
+    for i in range(tile_x):
+        for j in range(tile_y):
+            new_image.paste(image, (i * image.width, j * image.height))
+
+    buffer = BytesIO()
+    new_image.save(buffer, format="PNG")
+    img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return img_str
+
+    # Show and save the new image
+    # new_image.show()
+    # new_image.save("C:\\Users\\tyrar\\OneDrive\\Desktop\\Hackathon2025\\tiled_image.jpg")

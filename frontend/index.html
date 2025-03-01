@@ -3,6 +3,7 @@
         <script src="stencilCalculations.js"></script>
         <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
         <script src="videoReceiver.js"></script>
+        <script src="imageTiling.js"></script>
         <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     </head>
 
@@ -46,6 +47,15 @@
             </h4>
             <button onclick="startCamera()">Start Preview</button>
             <img id="video" src="">
+        </div>
+
+
+        <div id="tiling" class="h-screen">
+            <input type="file" id="file_upload" accept="image/*">
+            <button onclick="uploadImage()">Upload Image</button>
+            <input type="range" id="tile_x" name="tile_x" min="1" max="5" value="1" onchange="updateTile()">
+            <input type="range" id="tile_y" name="tile_y" min="1" max="5" value="1" onchange="updateTile()">
+            <img id="tile_image" src="">
         </div>
     </body>
 </html>
