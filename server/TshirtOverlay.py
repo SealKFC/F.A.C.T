@@ -3,13 +3,13 @@ from PIL import Image
 import numpy as np
 import os
 
-def overlay(pattern_file):
+def overlay(image):
     # Load the images
-    shirt = Image.open("Resources\\Shirts\\1.png").convert("RGBA")
-    overlay = Image.open(pattern_file).convert("RGBA")
+    shirt = Image.open("Resources/Shirts/1.png").convert("RGBA")
+    # overlay = Image.open(pattern_file).convert("RGBA")
 
     # Resize the overlay image to fit the shirt
-    overlay = overlay.resize(shirt.size)
+    overlay = image.convert("RGBA").resize(shirt.size)
 
     # Convert images to numpy arrays
     shirt_array = np.array(shirt)
@@ -29,15 +29,17 @@ def overlay(pattern_file):
     
     imagecount = count_images("Resources//Shirts") + 1
     
-    print(f"The image count is: {imagecount}")
-    #creates a new file name and adds 1 to create  new file for t-shirt
-    name = "T-Shirt_"
-    png = ".png"
-    imageFileName = f"{name}{imagecount}{png}"
+    # print(f"The image count is: {imagecount}")
+    # #creates a new file name and adds 1 to create  new file for t-shirt
+    # name = "T-Shirt_"
+    # png = ".png"
+    # imageFileName = f"{name}{imagecount}{png}"
 
     # Save and display the final output
-    result.save(f"Resources//Shirts//{imageFileName}")
-    result.show()
+    # result.save(f"Resources//Shirts//{imageFileName}")
+    # result.show()
+
+    return result
 
 
 #check how many photos are in the folder
@@ -51,4 +53,4 @@ def count_images(folder_path):
     return image_count
 
 
-overlay("C:\\Users\\tyrar\\OneDrive\\Desktop\\Hackathon2025\\flowers.jpg")
+# overlay("C:\\Users\\tyrar\\OneDrive\\Desktop\\Hackathon2025\\flowers.jpg")

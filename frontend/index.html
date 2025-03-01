@@ -53,9 +53,11 @@
         <div id="tiling" class="h-screen">
             <input type="file" id="file_upload" accept="image/*">
             <button onclick="uploadImage()">Upload Image</button>
+            <img id="tile_base" src="">
             <input type="range" id="tile_x" name="tile_x" min="1" max="5" value="1" onchange="updateTile()">
             <input type="range" id="tile_y" name="tile_y" min="1" max="5" value="1" onchange="updateTile()">
             <img id="tile_image" src="">
+            <button onclick="savePattern()">Save Pattern</button>
         </div>
     </body>
 </html>
