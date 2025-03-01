@@ -104,9 +104,9 @@ counterLeft = 0
 selectionSpeed = 10
 
 def generate_frames():
-    cap = cv2.VideoCapture("Resources/Videos/1.mp4")
-    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+    cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
     counter = 0
     predicted_stage = None 
     global is_streaming, imageNumber, counterRight, counterLeft
@@ -194,23 +194,26 @@ def generate_frames():
                     print("Error loading pant image!")
                     continue
                 else:
+                    middleHipX = (lm23[0] + lm24[0]) // 2
+                    middleHipY = (lm23[1] + lm24[1]) // 2
+                    middleHip = (middleHipX, middleHipY)
+
                     pant_orig_height, pant_orig_width = imgPant.shape[:2]
                     scale = pantHeightFromPose / pant_orig_height
 
-                    # Pants 
-                    #widthOfPant = int(abs(lm23[0] - lm24[0]) * fixedRatio)
                     widthOfPant = int(pant_orig_width * scale)
                     heightOfPant = int(pant_orig_height * scale)
                     try:
-                        imgPant = cv2.resize(imgPant, (widthOfPant, heightOfPant))
+                        imgPant = cv2.resize(imgPant, (widthOfPant + 15, heightOfPant))
                     except Exception as e:
                         print("Error resizing pant:", e)
                     # Calculate offset for the pants overlay
-                    currentScalePant = abs(lm23[0] - lm24[0]) / 190
-                    offsetPant = (int(44 * currentScalePant), int(48 * currentScalePant))
+                    offsetX = middleHip[0] - (imgPant.shape[1] // 2)
+                    offsetY = middleHip[1]  # Align the top edge with the hip's y-coordinate
+                    overlayPosition = (offsetX, offsetY)
                     try:
                         # Overlay pants using the right hip (lm24) as a reference
-                        image = cvzone.overlayPNG(image, imgPant, (lm24[0] - offsetPant[0], lm24[1] - offsetPant[1]))
+                        image = cvzone.overlayPNG(image, imgPant, overlayPosition)
                     except Exception as e:
                         print("Error overlaying pant:", e)
 
@@ -218,8 +221,8 @@ def generate_frames():
                 posLeft = (int(w * 0.84), int(h * 0.40))
                 image = cvzone.overlayPNG(image, imgButtonRight, posRight)
                 image = cvzone.overlayPNG(image, imgButtonLeft, posLeft)
-                right_wrist = (int(landmarks[16].x * w), int(landmarks[16].y * h))
-                left_wrist = (int(landmarks[15].x * w), int(landmarks[15].y * h))
+                right_wrist = (int(landmarks[18].x * w), int(landmarks[18].y * h))
+                left_wrist = (int(landmarks[17].x * w), int(landmarks[17].y * h))
                 distRight = np.linalg.norm(np.array(right_wrist) - np.array(posRight))
                 distLeft = np.linalg.norm(np.array(left_wrist) - np.array(posLeft))
                 proximityThreshold = 100
@@ -243,18 +246,6 @@ def generate_frames():
                 else:
                     counterRight = 0
                     counterLeft = 0
-                        
-                    knee_coords = tuple(np.multiply(left_knee, [640, 480]).astype(int))
-                    cv2.putText(
-                        image,
-                        str(int(angle)),              
-                        knee_coords,                    
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.6,                       
-                        (255, 255, 255),             
-                        2,                       
-                        cv2.LINE_AA
-                    )
             
             # encode frame as jpeg to be transmitted to frontend
             ret, buffer = cv2.imencode('.jpg', image)
