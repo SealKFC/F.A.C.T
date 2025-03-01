@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, RobustScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 import warnings
 import csv
@@ -33,7 +33,7 @@ app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")  # Allow cross-origin requests
 
-with open(r'C:\Users\rhima\HackathonCS6\server\models\deadlift.pkl', 'rb') as f:
+with open(r'models/deadlift.pkl', 'rb') as f:
     model = pickle.load(f, encoding='bytes')
 
 # Landmarking
@@ -78,7 +78,17 @@ def stop_camera():
     is_streaming = False
     return jsonify({'status': 'Camera streaming stopped'}), 200
 
-# Folder Paths
+from dogshit import create_tile
+
+@app.route("/upload_tile_image", methods=["POST"])
+def upload_tile_image():
+    global tile_image
+    if "image" not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+    request.files["image"].save("Resources/tile_base.png")
+    create_tile("Resources/tile_base.png")
+    return jsonify({"status": "Tile image uploaded"}), 200
+
 shirtFolderPath = "Resources/Shirts"
 pantFolderPath = "Resources/Pants"
 listShirts = os.listdir(shirtFolderPath)
@@ -94,9 +104,9 @@ counterLeft = 0
 selectionSpeed = 10
 
 def generate_frames():
-    cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+    cap = cv2.VideoCapture("Resources/Videos/1.mp4")
+    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
     counter = 0
     predicted_stage = None 
     global is_streaming, imageNumber, counterRight, counterLeft
@@ -265,6 +275,17 @@ def generate_frames():
 def handle_connect():
     print("Client connected")
     emit('message', {'data': 'Connected to MediaPipe backend'})
+
+from pattern import pattern
+
+@socketio.on("tile_size")
+def handle_tile_size(data):
+    tile_x = data.get('tile_x', 3)
+    tile_y = data.get('tile_y', 3)
+
+    tiled_image = pattern("Resources/tile_image.png", tile_x, tile_y)
+    emit('tiled_image', tiled_image)
+    
 
 def stream_video():
     for frame_data in generate_frames():
