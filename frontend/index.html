@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <script src="stencilCalculations.js"></script>
+        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="bg-[#fdc5f5]">
+        <div id="home" class="h-screen text-center">
+            <h1 class="text-9xl text-center pt-70">
+                F.A.C.T
+            </h1>
+            <h2 class="text-7xl">
+                Fashion, Aesthetics, Creativity, Technology
+            </h2>
+            <h3 class="text-5xl py-10">
+                We spit FACTs
+            </h3>
+            <a href="#sizing" class="text-4xl border-2 rounded border-[#b388eb] bg-[#b388eb]">
+                Get Started
+            </a>
+        </div>
+
+
+        <div id="sizing" class="text-center h-screen">
+            <h4 class="text-4xl text-center pt-10">
+                Enter your custom sizing
+            </h4>
+            <div class="px-50">
+                <label for="bust">Bust</label>
+                <input class="w-full mb-10" type="range" id="bust" name="bust" min="28" max="60" value="28">
+                <label for="waist">Waist</label>
+                <input class="w-full mb-10" type="range" id="waist" name="waist" min="20" max="50" value="20">
+                <label for="hip">Hip</label>
+                <input class="w-full mb-10" type="range" id="hip" name="hip" min="30" max="60" value="30">
+                <label for="height">Height</label>
+                <input class="w-full" type="range" id="height" name="height" min="4" max="7" value="4">
+            </div>
+        </div>
+
+
+        <div id="preview" class="h-screen">
+            <h4 class="text-4xl text-center pt-10">
+                Live Preview
+            </h4>
+        </div>
+    </body>
+</html>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
