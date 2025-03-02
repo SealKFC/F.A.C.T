@@ -192,6 +192,26 @@ def upload_shirt():
     imageNumber = 0
     return jsonify({"status": "Shirt image uploaded successfully."}), 200
 
+@app.route("/upload_pant", methods=["POST"])
+def upload_pant():
+    global needs_update, pant_cache, imageNumber
+    if "image" not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+    
+    file = request.files["image"]
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+    
+    filename = secure_filename(file.filename)
+    pant_path = os.path.join(pantFolderPath, filename)
+    file.save(pant_path)
+    
+    # Update cache after uploading a new shirt
+    needs_update = True
+    update_shirt_cache()
+    imageNumber = 0
+    return jsonify({"status": "Shirt image uploaded successfully."}), 200
+
 def generate_frames():
     global is_streaming, imageNumber, counterRight, counterLeft, needs_update
     cap = cv2.VideoCapture(0)
