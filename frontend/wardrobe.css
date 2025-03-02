@@ -105,10 +105,12 @@ width: 100%;
 
 /* Loading indicator overlay */
 .loading-indicator {
+    text-align: center;
+    border-radius: 2rem;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 40%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
@@ -117,6 +119,8 @@ width: 100%;
     align-items: center;
     font-size: 24px;
     z-index: 10;
+    /* move to middle */
+    transform: translateX(50%);
 }
 
 /* Slider container at the bottom */
