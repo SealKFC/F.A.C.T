@@ -65,7 +65,7 @@ html {
     font-weight: bold;
     color: yellow;
     text-shadow: 5px 5px 0px rgba(0, 0, 0, 0.3);
-    border: 2px solid red;
+    /* border: 2px solid red; */
     white-space: nowrap;
     letter-spacing: -1px;
 }
