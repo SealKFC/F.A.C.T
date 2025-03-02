@@ -5,38 +5,29 @@
         <script src="videoReceiver.js"></script>
         <script src="imageTiling.js"></script>
         <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+        <link rel="stylesheet" href="home.css">
     </head>
 
-    <body class="bg-[#fdc5f5]">
-        <div id="home" class="h-screen text-center">
+    <body class="bg-[#ff82b2]">
+        <div id="home">
 
-            <div>
-                <div>
-                    <!-- left -->
+            <div class="container">
+                <div class="image-container">
+                    <img src="assets/icon.png" alt="Pattern Image">
+                    <div class="heart-icon"></div>
                 </div>
-                <div>
-                    <!-- right -->
-                     <div>
-                        <div>test</div>
-                     </div>
-                     <div>
-
-                     </div>
+                <div class="title-container">
+                    <div class="title">F.A.C.T</div>
+                    <div class="subtitle">
+                        Fashion,&nbsp;Aesthetics<br>Creativity&nbsp;Technology
+                    </div>
                 </div>
             </div>
-
-            <!-- <h1 class="text-9xl text-center pt-70">
-                F.A.C.T
-            </h1>
-            <h2 class="text-7xl">
-                Fashion, Aesthetics, Creativity, and Technology
-            </h2>
-            <h3 class="text-5xl py-10">
-                We spit FACTs
-            </h3>
-            <a href="#sizing" class="text-4xl border-2 rounded border-[#b388eb] bg-[#b388eb]">
-                Get Started
-            </a> -->
+            <div class="button-container">
+                <a href="#" class="button">Test&nbsp;Patterns</a>
+                <a href="#" class="button">Adjust&nbsp;Patterns</a>
+                <a href="#" class="button">Try&nbsp;On</a>
+            </div>
         </div>
 
         <!-- 2x2 grid  -->
@@ -54,9 +45,10 @@
             <div>
                 <div class="flex flex-row items-center h-80">
                     <div class="flex flex-col mr-10">
-                        <img id="tile_base_shirt" class="h-40" src="">
-                        <input type="file" id="tile_upload_shirt" accept="image/*">
-                        <button onclick="uploadShirt()">Upload Image</button>
+                        <img id="tile_base_shirt" class="h-50 w-50" src="">
+                        <label for="tile_upload_shirt" class="text-center bg-[#ffb6c1] rounded-lg mx-5 my-2">Choose Image</label>
+                        <input type="file" id="tile_upload_shirt" class="hidden" accept="image/*" onchange="uploadShirt()">
+                        <!-- <button onclick="uploadShirt()">Tile Image</button> -->
                     </div>
                     <div class="flex flex-col">
                         <div>
