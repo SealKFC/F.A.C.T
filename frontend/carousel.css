@@ -212,7 +212,7 @@
     position: absolute;
     top: 118%;
     right: 160px;
-    height: 50%;
+    height: 460px;
     width: 40%;
     padding: var(--size-3, 1rem);
     overflow: auto;
@@ -220,7 +220,7 @@
 
 #shirtWrapper {
     height: 40%;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 #pantWrapper {
