@@ -397,7 +397,7 @@ def tile_size_pants(data):
     tile_y = data.get('tile_y', 3)
 
     tiled_image = pattern("Resources/pants_base_tile.png", tile_x, tile_y)
-    base = Image.open("Resources/Pants/beige_pants.png").convert("RGBA")
+    base = Image.open("Resources/Pants/1.png").convert("RGBA")
     pants = overlay(base, tiled_image)
 
     buffer = BytesIO()
