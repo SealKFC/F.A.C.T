@@ -9,7 +9,23 @@
 
     <body class="bg-[#fdc5f5]">
         <div id="home" class="h-screen text-center">
-            <h1 class="text-9xl text-center pt-70">
+
+            <div>
+                <div>
+                    <!-- left -->
+                </div>
+                <div>
+                    <!-- right -->
+                     <div>
+                        <div>test</div>
+                     </div>
+                     <div>
+
+                     </div>
+                </div>
+            </div>
+
+            <!-- <h1 class="text-9xl text-center pt-70">
                 F.A.C.T
             </h1>
             <h2 class="text-7xl">
@@ -20,9 +36,67 @@
             </h3>
             <a href="#sizing" class="text-4xl border-2 rounded border-[#b388eb] bg-[#b388eb]">
                 Get Started
-            </a>
+            </a> -->
         </div>
 
+        <!-- 2x2 grid  -->
+        <div id="tiling" class="h-screen flex flex-row">
+            <div class="flex flex-col h-full w-1/3">
+                <div class="flex flex-col justify-center">
+                    <img id="shirt_image" class="m-auto max-h-80 max-w-full" src="assets/shirt.png">
+                    <button onclick="saveShirt()" class="">Save Pattern</button>
+                </div>
+                <div class="flex flex-col justify-center">
+                    <img id="pants_image" class="m-auto max-h-80 max-w-full" src="assets/pants.png">
+                    <button onclick="savePants()" class="text-center">Save Pattern</button>
+                </div>
+            </div>
+            <div>
+                <div class="flex flex-row items-center h-80">
+                    <div class="flex flex-col mr-10">
+                        <img id="tile_base_shirt" class="h-40" src="">
+                        <input type="file" id="tile_upload_shirt" accept="image/*">
+                        <button onclick="uploadShirt()">Upload Image</button>
+                    </div>
+                    <div class="flex flex-col">
+                        <div>
+                            <label for="tile_x_shirt">X</label>
+                            <input type="range" id="tile_x_shirt" name="tile_x_shirt" min="1" max="5" value="1" onchange="updateShirtTile()">
+                        </div>
+                        <div>
+                            <label for="tile_y_shirt">Y</label>
+                            <input type="range" id="tile_y_shirt" name="tile_y_shirt" min="1" max="5" value="1" onchange="updateShirtTile()">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-row items-center h-80">
+                    <div class="flex flex-col mr-10">
+                        <img id="tile_base_pants" class="h-40" src="">
+                        <input type="file" id="tile_upload_pants" accept="image/*">
+                        <button onclick="uploadPants()">Upload Image</button>
+                    </div>
+                    <div class="flex flex-col">
+                        <div>
+                            <label for="tile_x_pants">X</label>
+                            <input type="range" id="tile_x_pants" name="tile_x_pants" min="1" max="5" value="1" onchange="updatePantsTile()">
+                        </div>
+                        <div>
+                            <label for="tile_y_pants">Y</label>
+                            <input type="range" id="tile_y_pants" name="tile_y_pants" min="1" max="5" value="1" onchange="updatePantsTile()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="preview" class="h-screen w-1/4">
+            <h4 class="text-4xl text-center pt-10">
+                Live Preview
+            </h4>
+            <button onclick="startCamera()">Start Video</button>
+            <button onclick="stopCamera()">Stop Video</button>
+            <img id="video" src="">
+        </div>
 
         <div id="sizing" class="text-center h-screen">
             <h4 class="text-4xl text-center pt-10">
@@ -40,25 +114,6 @@
             </div>
         </div>
 
-
-        <div id="preview" class="h-screen">
-            <h4 class="text-4xl text-center pt-10">
-                Live Preview
-            </h4>
-            <button onclick="startCamera()">Start Preview</button>
-            <img id="video" src="">
-        </div>
-
-
-        <div id="tiling" class="h-screen">
-            <input type="file" id="file_upload" accept="image/*">
-            <button onclick="uploadImage()">Upload Image</button>
-            <img id="tile_base" src="">
-            <input type="range" id="tile_x" name="tile_x" min="1" max="5" value="1" onchange="updateTile()">
-            <input type="range" id="tile_y" name="tile_y" min="1" max="5" value="1" onchange="updateTile()">
-            <img id="tile_image" src="">
-            <button onclick="savePattern()">Save Pattern</button>
-        </div>
     </body>
 </html>
 

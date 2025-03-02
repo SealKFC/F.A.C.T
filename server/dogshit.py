@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def create_tile(image_path):
+def create_tile(image_path, output_filename):
     # URL of the server where you want to send the image
     url = "https://www.imgonline.com.ua/eng/make-seamless-texture-result.php"
 
@@ -72,7 +72,7 @@ def create_tile(image_path):
 
     # download image from link
     response = requests.get(link_href)
-    with open("Resources/tile_image.png", "wb") as f:
+    with open(output_filename, "wb") as f:
         f.write(response.content)
 
 

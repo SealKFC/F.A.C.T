@@ -1,7 +1,5 @@
 from PIL import Image
 
-from TshirtOverlay import overlay
-
 def pattern(filename, tile_x, tile_y):
 
     # Load the user's image
@@ -24,9 +22,7 @@ def pattern(filename, tile_x, tile_y):
         for j in range(tile_y):
             new_image.paste(image, (i * image.width, j * image.height))
 
-    tshirt = overlay(new_image)
-
-    return tshirt
+    return new_image
 
     # Show and save the new image
     # new_image.show()

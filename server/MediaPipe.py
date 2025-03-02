@@ -18,6 +18,7 @@ import os
 from flask_cors import CORS
 import cvzone
 from cvzone.PoseModule import PoseDetector
+from PIL import Image
 
 warnings.filterwarnings(
     "ignore", 
@@ -80,18 +81,25 @@ def stop_camera():
 
 from dogshit import create_tile
 
-@app.route("/upload_tile_image", methods=["POST"])
-def upload_tile_image():
-    global tile_image
+@app.route("/upload_shirt_tile", methods=["POST"])
+def upload_shirt_tile():
     if "image" not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
-    request.files["image"].save("Resources/tile_base.png")
-    create_tile("Resources/tile_base.png")
+    request.files["image"].save("Resources/shirt_upload.png")
+    create_tile("Resources/shirt_upload.png", "Resources/shirt_base_tile.png")
     return jsonify({"status": "Tile image uploaded"}), 200
 
-@app.route("/save_pattern", methods=["POST"])
-def save_pattern():
-    global tiled_image
+@app.route("/upload_pants_tile", methods=["POST"])
+def upload_pants_tile():
+    if "image" not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+    request.files["image"].save("Resources/pants_upload.png")
+    create_tile("Resources/pants_upload.png", "Resources/pants_base_tile.png")
+    return jsonify({"status": "Tile image uploaded"}), 200
+
+@app.route("/save_shirt", methods=["POST"])
+def save_shirt():
+    global shirt
 
     # Define common image file extensions
     image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"}
@@ -99,7 +107,20 @@ def save_pattern():
     image_count = sum(1 for file in os.listdir("Resources/Shirts") if os.path.splitext(file)[1].lower() in image_extensions)
     imageFileName = f"T-Shirt_{image_count + 1}.png"
 
-    tiled_image.save(f"Resources/Shirts/{imageFileName}")
+    shirt.save(f"Resources/Shirts/{imageFileName}")
+    return jsonify({"status": "Tile image saved"}), 200
+
+@app.route("/save_pants", methods=["POST"])
+def save_pants():
+    global pants
+
+    # Define common image file extensions
+    image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"}
+    # Count the number of image files in the folder
+    image_count = sum(1 for file in os.listdir("Resources/Pants") if os.path.splitext(file)[1].lower() in image_extensions)
+    imageFileName = f"Pants_{image_count + 1}.png"
+
+    pants.save(f"Resources/Pants/{imageFileName}")
     return jsonify({"status": "Tile image saved"}), 200
 
 shirtFolderPath = "Resources/Shirts"
@@ -117,9 +138,9 @@ counterLeft = 0
 selectionSpeed = 10
 
 def generate_frames():
-    cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+    cap = cv2.VideoCapture("Resources/Videos/1.mp4")
+    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
     counter = 0
     predicted_stage = None 
     global is_streaming, imageNumber, counterRight, counterLeft
@@ -281,23 +302,43 @@ def handle_connect():
     emit('message', {'data': 'Connected to MediaPipe backend'})
 
 from pattern import pattern
+from TshirtOverlay import overlay
 from io import BytesIO
 import base64
-tiled_image = None
+shirt = None
+pants = None
 
-@socketio.on("tile_size")
-def handle_tile_size(data):
-    global tiled_image
+@socketio.on("tile_size_shirt")
+def tile_size_shirt(data):
+    global shirt
     tile_x = data.get('tile_x', 3)
     tile_y = data.get('tile_y', 3)
 
-    tiled_image = pattern("Resources/tile_image.png", tile_x, tile_y)
+    tiled_image = pattern("Resources/shirt_base_tile.png", tile_x, tile_y)
+    base = Image.open("Resources/Shirts/1.png").convert("RGBA")
+    shirt = overlay(base, tiled_image)
 
     buffer = BytesIO()
-    tiled_image.save(buffer, format="PNG")
+    shirt.save(buffer, format="PNG")
     img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-    emit('tiled_image', img_str)
+    emit('shirt_image', img_str)
+
+@socketio.on("tile_size_pants")
+def tile_size_pants(data):
+    global pants
+    tile_x = data.get('tile_x', 3)
+    tile_y = data.get('tile_y', 3)
+
+    tiled_image = pattern("Resources/pants_base_tile.png", tile_x, tile_y)
+    base = Image.open("Resources/Pants/beige_pants.png").convert("RGBA")
+    pants = overlay(base, tiled_image)
+
+    buffer = BytesIO()
+    pants.save(buffer, format="PNG")
+    img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+    emit('pants_image', img_str)
     
 
 def stream_video():
