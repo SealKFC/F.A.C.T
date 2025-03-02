@@ -24,63 +24,67 @@
                 </div>
             </div>
             <div class="button-container">
-                <a href="#" class="button">Test&nbsp;Patterns</a>
+                <a href="#tiling" class="button">Custom Design</a>
                 <a href="#" class="button">Adjust&nbsp;Patterns</a>
                 <a href="#" class="button">Try&nbsp;On</a>
             </div>
         </div>
 
         <!-- 2x2 grid  -->
-        <div id="tiling" class="h-screen flex flex-row">
-            <div class="flex flex-col h-full w-1/3">
-                <div class="flex flex-col justify-center">
-                    <img id="shirt_image" class="m-auto max-h-80 max-w-full" src="assets/shirt.png">
-                    <button onclick="saveShirt()" class="">Save Pattern</button>
-                </div>
-                <div class="flex flex-col justify-center">
-                    <img id="pants_image" class="m-auto max-h-80 max-w-full" src="assets/pants.png">
-                    <button onclick="savePants()" class="text-center">Save Pattern</button>
-                </div>
-            </div>
-            <div>
-                <div class="flex flex-row items-center h-80">
-                    <div class="flex flex-col mr-10">
-                        <img id="tile_base_shirt" class="h-50 w-50" src="">
-                        <label for="tile_upload_shirt" class="text-center bg-[#ffb6c1] rounded-lg mx-5 my-2">Choose Image</label>
-                        <input type="file" id="tile_upload_shirt" class="hidden" accept="image/*" onchange="uploadShirt()">
-                        <!-- <button onclick="uploadShirt()">Tile Image</button> -->
+        <div id="tiling" class="bg-[#bb82b2]">
+            <h2 class="text-6xl text-center">Custom Design</h2>
+            <div class="h-screen flex flex-row">
+                <div class="flex flex-col h-full w-1/3">
+                    <div class="flex flex-col justify-center">
+                        <img id="shirt_image" class="m-auto max-h-80 max-w-full" src="assets/shirt.png">
+                        <button onclick="saveShirt()" class="text-center bg-[#ffb6c1] m-auto p-1 rounded-lg my-2">Save Shirt</button>
                     </div>
-                    <div class="flex flex-col">
-                        <div>
-                            <label for="tile_x_shirt">X</label>
-                            <input type="range" id="tile_x_shirt" name="tile_x_shirt" min="1" max="5" value="1" onchange="updateShirtTile()">
-                        </div>
-                        <div>
-                            <label for="tile_y_shirt">Y</label>
-                            <input type="range" id="tile_y_shirt" name="tile_y_shirt" min="1" max="5" value="1" onchange="updateShirtTile()">
-                        </div>
+                    <div class="flex flex-col justify-center">
+                        <img id="pants_image" class="m-auto max-h-80 max-w-full" src="assets/pants.png">
+                        <button onclick="savePants()" class="text-center bg-[#ffb6c1] m-auto p-1 rounded-lg mt-2">Save Pants</button>
                     </div>
                 </div>
-                <div class="flex flex-row items-center h-80">
-                    <div class="flex flex-col mr-10">
-                        <img id="tile_base_pants" class="h-40" src="">
-                        <input type="file" id="tile_upload_pants" accept="image/*">
-                        <button onclick="uploadPants()">Upload Image</button>
-                    </div>
-                    <div class="flex flex-col">
-                        <div>
-                            <label for="tile_x_pants">X</label>
-                            <input type="range" id="tile_x_pants" name="tile_x_pants" min="1" max="5" value="1" onchange="updatePantsTile()">
+                <div>
+                    <div class="flex flex-row items-center h-80">
+                        <div class="flex flex-col mr-10">
+                            <img id="tile_base_shirt" class="h-50 w-50 border-red-500 border-2" src="">
+                            <label for="tile_upload_shirt" class="text-center bg-[#ffb6c1] rounded-lg mx-5 my-2">Choose Image</label>
+                            <input type="file" id="tile_upload_shirt" class="hidden" accept="image/*" onchange="uploadShirt()">
+                            <!-- <button onclick="uploadShirt()">Tile Image</button> -->
                         </div>
-                        <div>
-                            <label for="tile_y_pants">Y</label>
-                            <input type="range" id="tile_y_pants" name="tile_y_pants" min="1" max="5" value="1" onchange="updatePantsTile()">
+                        <div class="flex flex-col bg-[#ffb6c1] rounded-lg p-5">
+                            <div class="pb-2">
+                                <label for="tile_x_shirt">X</label>
+                                <input type="range" id="tile_x_shirt" name="tile_x_shirt" min="1" max="5" value="1" onchange="updateShirtTile()">
+                            </div>
+                            <div>
+                                <label for="tile_y_shirt">Y</label>
+                                <input type="range" id="tile_y_shirt" name="tile_y_shirt" min="1" max="5" value="1" onchange="updateShirtTile()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row items-center h-80">
+                        <div class="flex flex-col mr-10">
+                            <img id="tile_base_pants" class="h-50 w-50 border-red-500 border-2" src="">
+                            <label for="tile_upload_pants" class="text-center bg-[#ffb6c1] rounded-lg mx-5 my-2">Choose Image</label>
+                            <input type="file" id="tile_upload_pants" accept="image/*" onchange="uploadPants()" class="hidden">
+                            <!-- <button onclick="uploadPants()">Upload Image</button> -->
+                        </div>
+                        <div class="flex flex-col bg-[#ffb6c1] rounded-lg p-5">
+                            <div>
+                                <label for="tile_x_pants">X</label>
+                                <input type="range" id="tile_x_pants" name="tile_x_pants" min="1" max="5" value="1" onchange="updatePantsTile()">
+                            </div>
+                            <div>
+                                <label for="tile_y_pants">Y</label>
+                                <input type="range" id="tile_y_pants" name="tile_y_pants" min="1" max="5" value="1" onchange="updatePantsTile()">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>    
         </div>
-
+        
         <div id="preview" class="h-screen w-1/4">
             <h4 class="text-4xl text-center pt-10">
                 Live Preview
