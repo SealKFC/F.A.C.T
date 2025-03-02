@@ -1,0 +1,132 @@
+// Helper function to create a card element without extra formatting.
+// Each card is assigned both "card" (for infinite scrolling logic) and "media-element" (for Clothes.css styling).
+function createCard(src) {
+    const li = document.createElement("li");
+    li.classList.add("card", "media-element");
+    li.innerHTML = `<img src="${src}" alt="Clothing image" draggable="false">`;
+    return li;
+}
+
+// Fetch shirt images and populate the shirt carousel.
+function fetchShirts() {
+    fetch("http://127.0.0.1:5000/get_shirts_list")
+        .then(response => response.json())
+        .then(data => {
+            const carousel = document.getElementById("shirtCarousel");
+            carousel.innerHTML = "";
+            data.forEach(fileName => {
+                const src = `../server/Resources/Shirts/${fileName}`;
+                carousel.appendChild(createCard(src));
+            });
+            // Initialize infinite scrolling for the shirts carousel.
+            initCarousel(document.getElementById("shirtWrapper"));
+        })
+        .catch(error => console.error("Error loading shirt images:", error));
+}
+
+// Fetch pant images and populate the pant carousel.
+function fetchPants() {
+    fetch("http://127.0.0.1:5000/get_pants_list")
+        .then(response => response.json())
+        .then(data => {
+            const carousel = document.getElementById("pantCarousel");
+            carousel.innerHTML = "";
+            data.forEach(fileName => {
+                const src = `../server/Resources/Pants/${fileName}`;
+                carousel.appendChild(createCard(src));
+            });
+            // Initialize infinite scrolling for the pants carousel.
+            initCarousel(document.getElementById("pantWrapper"));
+        })
+        .catch(error => console.error("Error loading pant images:", error));
+}
+
+// This function implements the infinite scrolling and arrow navigation.
+// It is based on your provided code and is adapted to work for each carousel wrapper.
+function initCarousel(wrapper) {
+    const carousel = wrapper.querySelector(".carousel");
+    if (!carousel.querySelector(".card")) return;
+
+    const firstCardWidth = carousel.querySelector(".card").offsetWidth;
+    const arrowBtns = wrapper.querySelectorAll("i");
+    const carouselChildrens = [...carousel.children];
+    let isDragging = false, isAutoPlay = false, startX, startScrollLeft, timeoutId;
+
+    // Get the number of cards that fit in the carousel at once.
+    let cardPerView = Math.round(carousel.offsetWidth / firstCardWidth);
+
+    // Insert copies of the last few cards to the beginning for infinite scrolling.
+    carouselChildrens.slice(-cardPerView).reverse().forEach(card => {
+        carousel.insertAdjacentHTML("afterbegin", card.outerHTML);
+    });
+
+    // Insert copies of the first few cards to the end.
+    carouselChildrens.slice(0, cardPerView).forEach(card => {
+        carousel.insertAdjacentHTML("beforeend", card.outerHTML);
+    });
+
+    // Set initial scroll position to hide the prepended duplicates.
+    carousel.classList.add("no-transition");
+    carousel.scrollLeft = carousel.offsetWidth;
+    carousel.classList.remove("no-transition");
+
+    // Arrow button click logic.
+    arrowBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            carousel.scrollLeft += btn.id.includes("left") ? -firstCardWidth : firstCardWidth;
+        });
+    });
+
+    // Drag functionality.
+    const dragStart = (e) => {
+        isDragging = true;
+        carousel.classList.add("dragging");
+        startX = e.pageX;
+        startScrollLeft = carousel.scrollLeft;
+    };
+
+    const dragging = (e) => {
+        if (!isDragging) return;
+        carousel.scrollLeft = startScrollLeft - (e.pageX - startX);
+    };
+
+    const dragStop = () => {
+        isDragging = false;
+        carousel.classList.remove("dragging");
+    };
+
+    // Infinite scroll reset.
+    const infiniteScroll = () => {
+        if (carousel.scrollLeft === 0) {
+            carousel.classList.add("no-transition");
+            carousel.scrollLeft = carousel.scrollWidth - (2 * carousel.offsetWidth);
+            carousel.classList.remove("no-transition");
+        } else if (Math.ceil(carousel.scrollLeft) === carousel.scrollWidth - carousel.offsetWidth) {
+            carousel.classList.add("no-transition");
+            carousel.scrollLeft = carousel.offsetWidth;
+            carousel.classList.remove("no-transition");
+        }
+        clearTimeout(timeoutId);
+        if (!wrapper.matches(":hover")) autoPlay();
+    };
+
+    // Autoplay logic.
+    const autoPlay = () => {
+        if (window.innerWidth < 800 || !isAutoPlay) return;
+        timeoutId = setTimeout(() => carousel.scrollLeft += firstCardWidth, 2500);
+    };
+    autoPlay();
+
+    carousel.addEventListener("mousedown", dragStart);
+    carousel.addEventListener("mousemove", dragging);
+    document.addEventListener("mouseup", dragStop);
+    carousel.addEventListener("scroll", infiniteScroll);
+    wrapper.addEventListener("mouseenter", () => clearTimeout(timeoutId));
+    wrapper.addEventListener("mouseleave", autoPlay);
+}
+
+// Initialize image fetching once the DOM is fully loaded.
+document.addEventListener("DOMContentLoaded", () => {
+    fetchShirts();
+    fetchPants();
+});
