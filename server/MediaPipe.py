@@ -114,6 +114,34 @@ def upload_pants_tile():
     create_tile("Resources/pants_upload.png", "Resources/pants_base_tile.png")
     return jsonify({"status": "Tile image uploaded"}), 200
 
+@app.route("/get_shirts_list", methods=["GET"])
+def get_shirts_list():
+    # Adjust the folder path as needed. Here we assume it's relative to the current working directory.
+    folder_path = os.path.join(os.getcwd(), "Resources", "Shirts")
+    
+    images = []
+    # Loop over all files in the folder
+    for file in os.listdir(folder_path):
+        # Optionally filter by image file extensions
+        if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+            images.append(file)
+    
+    return jsonify(images)
+
+@app.route("/get_pants_list", methods=["GET"])
+def get_pants_list():
+    # Adjust the folder path as needed. Here we assume it's relative to the current working directory.
+    folder_path = os.path.join(os.getcwd(), "Resources", "Pants")
+    
+    images = []
+    # Loop over all files in the folder
+    for file in os.listdir(folder_path):
+        # Optionally filter by image file extensions
+        if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
+            images.append(file)
+    
+    return jsonify(images)
+
 @app.route("/save_shirt", methods=["POST"])
 def save_shirt():
     global shirt
