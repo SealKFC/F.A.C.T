@@ -4,6 +4,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="wardrobe.css">
+  <link rel="stylesheet" type="text/css" href="Clothes.css" />
   <meta charset="UTF-8">
   <title>Shirt & Pants on a Person</title>
 </head>
@@ -68,6 +69,27 @@
     <input type="file" id="tile_upload_shirt" class="hidden-input" accept="image/*">
     <input type="file" id="tile_upload_pants" class="hidden-input" accept="image/*">
   </div>
+    <div class="image-container">
+        <!-- Shirts Carousel -->
+        <h2></h2>
+        <div class="wrapper" id="shirtWrapper">
+        <i id="left-shirt" class="fa-solid fa-angle-left"></i>
+        <ul class="carousel snaps-inline" id="shirtCarousel">
+            <!-- Shirt images will be inserted here as <li class="card media-element"> elements -->
+        </ul>
+        <i id="right-shirt" class="fa-solid fa-angle-right"></i>
+        </div>
+
+        <!-- Pants Carousel -->
+        <h2></h2>
+        <div class="wrapper" id="pantWrapper">
+        <i id="left-pant" class="fa-solid fa-angle-left"></i>
+        <ul class="carousel snaps-inline" id="pantCarousel">
+            <!-- Pant images will be inserted here as <li class="card media-element"> elements -->
+        </ul>
+        <i id="right-pant" class="fa-solid fa-angle-right"></i>
+        </div>
+    </div>
 </div>
 
 <div id="mirror">
@@ -78,5 +100,6 @@
   <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
   <script src="imageTiling.js"></script>
   <script src="videoReceiver.js"></script>
+  <script src="Clothes.js"></script>
 </body>
 </html>
