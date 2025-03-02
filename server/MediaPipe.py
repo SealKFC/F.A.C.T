@@ -144,7 +144,9 @@ def get_pants_list():
 
 @app.route("/save_shirt", methods=["POST"])
 def save_shirt():
-    global shirt
+    global shirt, needs_update
+
+    needs_update = True
 
     # Define common image file extensions
     image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"}
@@ -157,7 +159,9 @@ def save_shirt():
 
 @app.route("/save_pants", methods=["POST"])
 def save_pants():
-    global pants
+    global pants, needs_update
+
+    needs_update = True
 
     # Define common image file extensions
     image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"}
