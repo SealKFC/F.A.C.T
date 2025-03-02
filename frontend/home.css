@@ -1,5 +1,9 @@
-#home {
+html {
     background-color: #ff82b2;
+    scroll-behavior: smooth;
+}
+
+#home {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: space-between;

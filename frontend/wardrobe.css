@@ -1,0 +1,242 @@
+body {
+    margin: 0;
+}
+
+#divider {
+    width: 100vw;
+    overflow: visible;
+    /* background: url('assets/divider.png') no-repeat center center; */
+    background-size: cover;
+    height: 0;
+}
+
+#divider img {
+    width: 100%;
+    position: relative;
+    top: -50px;
+    transform: scale(1.0);
+}
+
+#wardrobe {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    /* Fullscreen background image */
+    background: url('assets/wardrobeBackground.png');
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#home {
+    height: 100vh;
+    width: 100%;
+}
+
+/* #wardrobe {
+height: 100vw;
+width: 100%;
+} */
+/* Main container */
+.left-container {
+    width: 500px;
+    /* background: rgba(255, 255, 255, 0.8); */
+    /* border: 1px solid #ccc; */
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 2%;
+    top: 110%;
+}
+
+/* Container for the images (shirt on top, pants below) */
+.person-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+}
+
+.image-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* space between the main image and the arrow */
+}
+
+.arrow-image {
+    width: 80px;
+    /* adjust as needed */
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.arrow-image:hover {
+    transform: scale(1.05);
+}
+
+/* Display images: transparent background so they blend with the page background */
+.display-image {
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 35%;
+    height: auto;
+    object-fit: contain;
+    /* border-bottom: 1px solid #ccc; */
+    background: transparent;
+    transition: transform 0.3s ease;
+    opacity: 0.5;
+}
+
+#pants_image {
+    width: 50%;
+}
+
+.display-image:hover {
+    transform: scale(1.05);
+}
+
+/* Loading indicator overlay */
+.loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    z-index: 10;
+}
+
+/* Slider container at the bottom */
+.slider-container {
+    font-size: larger;
+    padding: 20px;
+    padding-top: 0;
+    margin-right: 20%;
+    display: flex;
+    /* gap: 0px; */
+    justify-content: center;
+    font-family: 'Caveat', cursive;
+    color: whitesmoke;
+    /* background: #eee; */
+}
+
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.slider-group h3 {
+    margin: 0 0 5px;
+    font-size: x-large;
+}
+
+/* Custom styling for range inputs */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100px;
+    background: transparent;
+    cursor: pointer;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+/* Thumb styling for WebKit browsers */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 2em;
+    height: 2em;
+    background-color: #16a085;
+    border-radius: 1em;
+    /* border: 2px solid rgba(255,255,255,0.5); */
+    transition: border-color 0.2s;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+    border-color: rgba(255, 255, 255, 1);
+}
+
+/* Thumb styling for Mozilla */
+input[type="range"]::-moz-range-thumb {
+    width: 2em;
+    height: 2em;
+    background-color: #16a085;
+    border-radius: 1em;
+    /* border: 2px solid rgba(255,255,255,0.5); */
+    transition: border-color 0.2s;
+}
+
+input[type="range"]:hover::-moz-range-thumb {
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+input[type="range"]:active::-moz-range-thumb {
+    border-color: rgba(255, 255, 255, 1);
+}
+
+/* Thumb styling for IE/Edge */
+input[type="range"]::-ms-thumb {
+    width: 2em;
+    height: 2em;
+    background-color: #16a085;
+    border-radius: 1em;
+    /* border: 2px solid rgba(255,255,255,0.5); */
+    transition: border-color 0.2s;
+}
+
+input[type="range"]:hover::-ms-thumb {
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+input[type="range"]:active::-ms-thumb {
+    border-color: rgba(255, 255, 255, 1);
+}
+
+/* Track styling for WebKit */
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: #ccc;
+    border-radius: 3px;
+}
+
+/* Track styling for Mozilla */
+input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    background: #ccc;
+    border-radius: 3px;
+}
+
+/* Track styling for IE/Edge */
+input[type="range"]::-ms-track {
+    width: 100%;
+    height: 6px;
+    background: #ccc;
+    border-radius: 3px;
+}
+
+/* Hide the file inputs */
+.hidden-input {
+    display: none;
+}

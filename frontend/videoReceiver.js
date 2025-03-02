@@ -1,7 +1,3 @@
-const socket = io("http://localhost:5000");
-
-console.log("Connecting to server");
-
 window.addEventListener('DOMContentLoaded', function() {
     img = document.getElementById("video");
 });

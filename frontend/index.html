@@ -1,120 +1,78 @@
-<html>
-    <head>
-        <script src="stencilCalculations.js"></script>
-        <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
-        <script src="videoReceiver.js"></script>
-        <script src="imageTiling.js"></script>
-        <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-        <link rel="stylesheet" href="home.css">
-    </head>
-
-    <body class="bg-[#ff82b2]">
-        <div id="home">
-
-            <div class="container">
-                <div class="image-container">
-                    <img src="assets/icon.png" alt="Pattern Image">
-                    <div class="heart-icon"></div>
-                </div>
-                <div class="title-container">
-                    <div class="title">F.A.C.T</div>
-                    <div class="subtitle">
-                        Fashion,&nbsp;Aesthetics<br>Creativity&nbsp;Technology
-                    </div>
-                </div>
-            </div>
-            <div class="button-container">
-                <a href="#tiling" class="button">Custom Design</a>
-                <a href="#" class="button">Adjust&nbsp;Patterns</a>
-                <a href="#" class="button">Try&nbsp;On</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="wardrobe.css">
+  <meta charset="UTF-8">
+  <title>Shirt & Pants on a Person</title>
+</head>
+<body>
+  <div id="home">
+    <div class="container">
+        <div class="image-container">
+            <img src="assets/icon.png" alt="Pattern Image">
+            <div class="heart-icon"></div>
+        </div>
+        <div class="title-container">
+            <div class="title">F.A.C.T</div>
+            <div class="subtitle">
+                Fashion, Aesthetics,<br>Creativity, Technology
             </div>
         </div>
+    </div>
+    <div class="button-container">
+        <a href="#wardrobe" class="button">Custom Design</a>
+        <a href="#" class="button">Adjust&nbsp;Patterns</a>
+        <a href="#" class="button">Try&nbsp;On</a>
+    </div>
+</div>
 
-        <!-- 2x2 grid  -->
-        <div id="tiling" class="bg-[#bb82b2]">
-            <h2 class="text-6xl text-center">Custom Design</h2>
-            <div class="h-screen flex flex-row">
-                <div class="flex flex-col h-full w-1/3">
-                    <div class="flex flex-col justify-center">
-                        <img id="shirt_image" class="m-auto max-h-80 max-w-full" src="assets/shirt.png">
-                        <button onclick="saveShirt()" class="text-center bg-[#ffb6c1] m-auto p-1 rounded-lg my-2">Save Shirt</button>
-                    </div>
-                    <div class="flex flex-col justify-center">
-                        <img id="pants_image" class="m-auto max-h-80 max-w-full" src="assets/pants.png">
-                        <button onclick="savePants()" class="text-center bg-[#ffb6c1] m-auto p-1 rounded-lg mt-2">Save Pants</button>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex flex-row items-center h-80">
-                        <div class="flex flex-col mr-10">
-                            <img id="tile_base_shirt" class="h-50 w-50 border-red-500 border-2" src="">
-                            <label for="tile_upload_shirt" class="text-center bg-[#ffb6c1] rounded-lg mx-5 my-2">Choose Image</label>
-                            <input type="file" id="tile_upload_shirt" class="hidden" accept="image/*" onchange="uploadShirt()">
-                            <!-- <button onclick="uploadShirt()">Tile Image</button> -->
-                        </div>
-                        <div class="flex flex-col bg-[#ffb6c1] rounded-lg p-5">
-                            <div class="pb-2">
-                                <label for="tile_x_shirt">X</label>
-                                <input type="range" id="tile_x_shirt" name="tile_x_shirt" min="1" max="5" value="1" onchange="updateShirtTile()">
-                            </div>
-                            <div>
-                                <label for="tile_y_shirt">Y</label>
-                                <input type="range" id="tile_y_shirt" name="tile_y_shirt" min="1" max="5" value="1" onchange="updateShirtTile()">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-row items-center h-80">
-                        <div class="flex flex-col mr-10">
-                            <img id="tile_base_pants" class="h-50 w-50 border-red-500 border-2" src="">
-                            <label for="tile_upload_pants" class="text-center bg-[#ffb6c1] rounded-lg mx-5 my-2">Choose Image</label>
-                            <input type="file" id="tile_upload_pants" accept="image/*" onchange="uploadPants()" class="hidden">
-                            <!-- <button onclick="uploadPants()">Upload Image</button> -->
-                        </div>
-                        <div class="flex flex-col bg-[#ffb6c1] rounded-lg p-5">
-                            <div>
-                                <label for="tile_x_pants">X</label>
-                                <input type="range" id="tile_x_pants" name="tile_x_pants" min="1" max="5" value="1" onchange="updatePantsTile()">
-                            </div>
-                            <div>
-                                <label for="tile_y_pants">Y</label>
-                                <input type="range" id="tile_y_pants" name="tile_y_pants" min="1" max="5" value="1" onchange="updatePantsTile()">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>    
-        </div>
-        
-        <div id="preview" class="h-screen w-1/4">
-            <h4 class="text-4xl text-center pt-10">
-                Live Preview
-            </h4>
-            <button onclick="startCamera()">Start Video</button>
-            <button onclick="stopCamera()">Stop Video</button>
-            <img id="video" src="">
-        </div>
+<div id="wardrobe">
+  <div class="left-container">
+    <!-- Person Container: Shirt on top, Pants on bottom -->
+    <div class="person-container">
+      <div class="image-wrapper">
+        <img id="shirt_image" class="display-image" src="assets/white-shirt.png" alt="Shirt Image" onclick="document.getElementById('tile_upload_shirt').click();">
+        <img class="arrow-image" src="assets/arrow.png" alt="Arrow for Shirt" onclick="saveShirt()">
+        <div id="loading_shirt" class="loading-indicator">Loading...</div>
+      </div>
+      <div class="image-wrapper">
+        <img id="pants_image" class="display-image" src="assets/white-pants.png" alt="Pants Image" onclick="document.getElementById('tile_upload_pants').click();">
+        <img class="arrow-image" src="assets/arrow.png" alt="Arrow for Shirt" onclick="savePants()">
+        <div id="loading_pants" class="loading-indicator">Loading...</div>
+      </div>
+    </div>
+    <!-- Slider controls for both Shirt and Pants -->
+    <div class="slider-container">
+      <div class="slider-group">
+        <h3>Shirt</h3>
+        <label for="tile_x_shirt">Tile X</label>
+        <input type="range" id="tile_x_shirt" min="1" max="5" value="1">
+        <label for="tile_y_shirt">Tile Y</label>
+        <input type="range" id="tile_y_shirt" min="1" max="5" value="1">
+      </div>
+      <div class="slider-group">
+        <h3>Pants</h3>
+        <label for="tile_x_pants">Tile X</label>
+        <input type="range" id="tile_x_pants" min="1" max="5" value="1">
+        <label for="tile_y_pants">Tile Y</label>
+        <input type="range" id="tile_y_pants" min="1" max="5" value="1">
+      </div>
+    </div>
+    <!-- Hidden file inputs -->
+    <input type="file" id="tile_upload_shirt" class="hidden-input" accept="image/*">
+    <input type="file" id="tile_upload_pants" class="hidden-input" accept="image/*">
+  </div>
+</div>
 
-        <div id="sizing" class="text-center h-screen">
-            <h4 class="text-4xl text-center pt-10">
-                Enter your custom sizing
-            </h4>
-            <div class="px-50">
-                <label for="bust">Bust</label>
-                <input class="w-full mb-10" type="range" id="bust" name="bust" min="28" max="60" value="28">
-                <label for="waist">Waist</label>
-                <input class="w-full mb-10" type="range" id="waist" name="waist" min="20" max="50" value="20">
-                <label for="hip">Hip</label>
-                <input class="w-full mb-10" type="range" id="hip" name="hip" min="30" max="60" value="30">
-                <label for="height">Height</label>
-                <input class="w-full" type="range" id="height" name="height" min="4" max="7" value="4">
-            </div>
-        </div>
+<div id="mirror">
+  
+</div>
 
-    </body>
+  <!-- Import Socket.io from CDN -->
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+  <script src="imageTiling.js"></script>
+  <script src="videoReceiver.js"></script>
+</body>
 </html>
-
-<style>
-    html {
-        scroll-behavior: smooth;
-    }
-</style>
