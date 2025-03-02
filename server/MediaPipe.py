@@ -18,6 +18,7 @@ import os
 from flask_cors import CORS
 import cvzone
 from cvzone.PoseModule import PoseDetector
+from PIL import Image
 
 warnings.filterwarnings(
     "ignore", 
@@ -80,19 +81,55 @@ def stop_camera():
 
 from dogshit import create_tile
 
-@app.route("/upload_tile_image", methods=["POST"])
-def upload_tile_image():
-    global tile_image
+@app.route("/upload_shirt_tile", methods=["POST"])
+def upload_shirt_tile():
     if "image" not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
-    request.files["image"].save("Resources/tile_base.png")
-    create_tile("Resources/tile_base.png")
+    request.files["image"].save("Resources/shirt_upload.png")
+    create_tile("Resources/shirt_upload.png", "Resources/shirt_base_tile.png")
     return jsonify({"status": "Tile image uploaded"}), 200
 
+@app.route("/upload_pants_tile", methods=["POST"])
+def upload_pants_tile():
+    if "image" not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+    request.files["image"].save("Resources/pants_upload.png")
+    create_tile("Resources/pants_upload.png", "Resources/pants_base_tile.png")
+    return jsonify({"status": "Tile image uploaded"}), 200
+
+@app.route("/save_shirt", methods=["POST"])
+def save_shirt():
+    global shirt
+
+    # Define common image file extensions
+    image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"}
+    # Count the number of image files in the folder
+    image_count = sum(1 for file in os.listdir("Resources/Shirts") if os.path.splitext(file)[1].lower() in image_extensions)
+    imageFileName = f"T-Shirt_{image_count + 1}.png"
+
+    shirt.save(f"Resources/Shirts/{imageFileName}")
+    return jsonify({"status": "Tile image saved"}), 200
+
+@app.route("/save_pants", methods=["POST"])
+def save_pants():
+    global pants
+
+    # Define common image file extensions
+    image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"}
+    # Count the number of image files in the folder
+    image_count = sum(1 for file in os.listdir("Resources/Pants") if os.path.splitext(file)[1].lower() in image_extensions)
+    imageFileName = f"Pants_{image_count + 1}.png"
+
+    pants.save(f"Resources/Pants/{imageFileName}")
+    return jsonify({"status": "Tile image saved"}), 200
+
 shirtFolderPath = "Resources/Shirts"
+pantFolderPath = "Resources/Pants"
 listShirts = os.listdir(shirtFolderPath)
+listPants = os.listdir(pantFolderPath)
+
 fixedRatio = 262 / 190
-shirtRatioHeightWidth = 581 / 440
+clotheRatioHeightWidth = 581 / 440
 imageNumber = 0
 imgButtonRight = cv2.imread("Resources/button.png", cv2.IMREAD_UNCHANGED)
 imgButtonLeft = cv2.flip(imgButtonRight, 1)
@@ -149,68 +186,77 @@ def generate_frames():
                 keypoints = keypoints.reshape(1, -1) # Reshape to (1, 33 * 4)
                 keypoints = pd.DataFrame(keypoints, columns=feature_columns)
 
-                # Get prediction from the model.
-                try:
-                    predicted_class = model.predict(keypoints)[0]
-                except Exception as e:
-                    print("Error during prediction:", e)
-                    continue
-
-                # Get confidence value if available.
-                probabilities = model.predict_proba(keypoints)
-                confidence_value = np.max(probabilities)
-
-                # Count a rep when transitioning from 'up' to 'down'
-                if predicted_class == 'deadlift: down' and predicted_stage == 'deadlift: up':
-                    counter += 1
-                    print("Rep counted! Total reps:", counter)
-                if predicted_class == 'deadlift: lean left' and predicted_stage == 'deadlift: lean right':
-                    counter += 1
-                    print("Re-center yourself:", counter)
-
-                predicted_stage  = predicted_class
-
                 h, w, _ = image.shape
                 landmarks = results.pose_landmarks.landmark
 
                 # Extract left and right shoulder landmarks (MediaPipe indices 11 and 12)
                 lm11 = [int(landmarks[11].x * w), int(landmarks[11].y * h)]
                 lm12 = [int(landmarks[12].x * w), int(landmarks[12].y * h)]
+                lm23 = [int(landmarks[23].x * w), int(landmarks[23].y * h)]
+                lm24 = [int(landmarks[24].x * w), int(landmarks[24].y * h)]
+                lm28 = [int(landmarks[28].x * w), int(landmarks[28].y * h)]
+                pantHeightFromPose = abs(lm28[1] - lm24[1])
 
                 # Load the shirt image (ensure shirtFolderPath, listShirts, imageNumber exist)
                 imgShirt = cv2.imread(os.path.join(shirtFolderPath, listShirts[imageNumber]), cv2.IMREAD_UNCHANGED)
                 if imgShirt is None:
                     print("Error loading shirt image!")
                     continue
+                else:
+                    # Calculate the desired width and height of the shirt overlay.
+                    widthOfShirt = int(abs(lm11[0] - lm12[0]) * fixedRatio)
+                    widthOfShirt = max(widthOfShirt, 1)  # prevent zero width
+                    heightOfShirt = int(widthOfShirt * clotheRatioHeightWidth)
+                    heightOfShirt = max(heightOfShirt, 1)  # prevent zero height
 
-                # Calculate the desired width and height of the shirt overlay.
-                widthOfShirt = int(abs(lm11[0] - lm12[0]) * fixedRatio)
-                widthOfShirt = max(widthOfShirt, 1)  # prevent zero width
-                heightOfShirt = int(widthOfShirt * shirtRatioHeightWidth)
-                heightOfShirt = max(heightOfShirt, 1)  # prevent zero height
-
-                try:
-                    imgShirt = cv2.resize(imgShirt, (widthOfShirt, heightOfShirt))
-                except Exception as e:
-                    print("Error resizing shirt:", e)
+                    try:
+                        imgShirt = cv2.resize(imgShirt, (widthOfShirt, heightOfShirt))
+                    except Exception as e:
+                        print("Error resizing shirt:", e)
+                        continue
+                    # offset
+                    currentScale = (lm11[0] - lm12[0]) / 190
+                    offset = (int(44 * currentScale), int(48 * currentScale))
+                    try:
+                        image = cvzone.overlayPNG(image, imgShirt, (lm12[0] - offset[0], lm12[1] - offset[1]))
+                    except Exception as e:
+                        print("Error overlaying shirt:", e)
+                        pass
+                    
+                imgPant = cv2.imread(os.path.join(pantFolderPath, listPants[imageNumber]), cv2.IMREAD_UNCHANGED)
+                if imgPant is None:
+                    print("Error loading pant image!")
                     continue
+                else:
+                    middleHipX = (lm23[0] + lm24[0]) // 2
+                    middleHipY = (lm23[1] + lm24[1]) // 2
+                    middleHip = (middleHipX, middleHipY)
 
-                currentScale = (lm11[0] - lm12[0]) / 190
-                offset = (int(44 * currentScale), int(48 * currentScale))
+                    pant_orig_height, pant_orig_width = imgPant.shape[:2]
+                    scale = pantHeightFromPose / pant_orig_height
 
-                try:
-                    # Overlay the shirt image onto the main image.
-                    image = cvzone.overlayPNG(image, imgShirt, (lm12[0] - offset[0], lm12[1] - offset[1]))
-                except Exception as e:
-                    print("Error overlaying shirt:", e)
-                    pass
+                    widthOfPant = int(pant_orig_width * scale)
+                    heightOfPant = int(pant_orig_height * scale)
+                    try:
+                        imgPant = cv2.resize(imgPant, (widthOfPant + 15, heightOfPant))
+                    except Exception as e:
+                        print("Error resizing pant:", e)
+                    # Calculate offset for the pants overlay
+                    offsetX = middleHip[0] - (imgPant.shape[1] // 2)
+                    offsetY = middleHip[1]  # Align the top edge with the hip's y-coordinate
+                    overlayPosition = (offsetX, offsetY)
+                    try:
+                        # Overlay pants using the right hip (lm24) as a reference
+                        image = cvzone.overlayPNG(image, imgPant, overlayPosition)
+                    except Exception as e:
+                        print("Error overlaying pant:", e)
 
                 posRight = (int(w * 0.06), int(h * 0.40))
                 posLeft = (int(w * 0.84), int(h * 0.40))
                 image = cvzone.overlayPNG(image, imgButtonRight, posRight)
                 image = cvzone.overlayPNG(image, imgButtonLeft, posLeft)
-                right_wrist = (int(landmarks[16].x * w), int(landmarks[16].y * h))
-                left_wrist = (int(landmarks[15].x * w), int(landmarks[15].y * h))
+                right_wrist = (int(landmarks[18].x * w), int(landmarks[18].y * h))
+                left_wrist = (int(landmarks[17].x * w), int(landmarks[17].y * h))
                 distRight = np.linalg.norm(np.array(right_wrist) - np.array(posRight))
                 distLeft = np.linalg.norm(np.array(left_wrist) - np.array(posLeft))
                 proximityThreshold = 100
@@ -234,30 +280,6 @@ def generate_frames():
                 else:
                     counterRight = 0
                     counterLeft = 0
-
-
-                if show_angles:
-                    left_hip = [int(landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x * w),
-                                int(landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y * h)]
-                    left_knee = [int(landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x * w),
-                                 int(landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y * h)]
-                    left_ankle = [int(landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x * w),
-                                  int(landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y * h)]
-                    
-                    # Calculate the angle at the left knee
-                    angle = calculate_angle(left_hip, left_knee, left_ankle)
-                        
-                    knee_coords = tuple(np.multiply(left_knee, [640, 480]).astype(int))
-                    cv2.putText(
-                        image,
-                        str(int(angle)),              
-                        knee_coords,                    
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.6,                       
-                        (255, 255, 255),             
-                        2,                       
-                        cv2.LINE_AA
-                    )
             
             # encode frame as jpeg to be transmitted to frontend
             ret, buffer = cv2.imencode('.jpg', image)
@@ -280,14 +302,43 @@ def handle_connect():
     emit('message', {'data': 'Connected to MediaPipe backend'})
 
 from pattern import pattern
+from TshirtOverlay import overlay
+from io import BytesIO
+import base64
+shirt = None
+pants = None
 
-@socketio.on("tile_size")
-def handle_tile_size(data):
+@socketio.on("tile_size_shirt")
+def tile_size_shirt(data):
+    global shirt
     tile_x = data.get('tile_x', 3)
     tile_y = data.get('tile_y', 3)
 
-    tiled_image = pattern("Resources/tile_image.png", tile_x, tile_y)
-    emit('tiled_image', tiled_image)
+    tiled_image = pattern("Resources/shirt_base_tile.png", tile_x, tile_y)
+    base = Image.open("Resources/Shirts/1.png").convert("RGBA")
+    shirt = overlay(base, tiled_image)
+
+    buffer = BytesIO()
+    shirt.save(buffer, format="PNG")
+    img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+    emit('shirt_image', img_str)
+
+@socketio.on("tile_size_pants")
+def tile_size_pants(data):
+    global pants
+    tile_x = data.get('tile_x', 3)
+    tile_y = data.get('tile_y', 3)
+
+    tiled_image = pattern("Resources/pants_base_tile.png", tile_x, tile_y)
+    base = Image.open("Resources/Pants/beige_pants.png").convert("RGBA")
+    pants = overlay(base, tiled_image)
+
+    buffer = BytesIO()
+    pants.save(buffer, format="PNG")
+    img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+    emit('pants_image', img_str)
     
 
 def stream_video():
@@ -297,4 +348,3 @@ def stream_video():
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
-

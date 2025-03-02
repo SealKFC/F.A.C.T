@@ -1,6 +1,4 @@
 from PIL import Image
-from io import BytesIO
-import base64
 
 def pattern(filename, tile_x, tile_y):
 
@@ -24,10 +22,7 @@ def pattern(filename, tile_x, tile_y):
         for j in range(tile_y):
             new_image.paste(image, (i * image.width, j * image.height))
 
-    buffer = BytesIO()
-    new_image.save(buffer, format="PNG")
-    img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
-    return img_str
+    return new_image
 
     # Show and save the new image
     # new_image.show()

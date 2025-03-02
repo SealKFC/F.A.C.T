@@ -27,3 +27,13 @@ startCamera = () => {
             console.log("Error starting camera");
         });
 }
+
+stopCamera = () => {
+    fetch("http://localhost:5000/stop_camera")
+        .then((response) => {
+            console.log("Camera stopped");
+        })
+        .catch((error) => {
+            console.log("Error stopping camera");
+        });
+}
