@@ -210,7 +210,8 @@
 
 .image-container {
     position: absolute;
-    top: 118%;
+    top: calc(100% + 12rem);
+    /* top: 118%; */
     right: 160px;
     height: 460px;
     width: 40%;
