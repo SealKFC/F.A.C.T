@@ -1,6 +1,7 @@
 @import "https://unpkg.com/open-props";
 @import "https://unpkg.com/open-props/normalize.min.css";
 
+
 .media-scroller {
   --_spacer: var(--size-3);
   display: grid;
@@ -25,7 +26,6 @@
 }
 
 .media-element {
-  height: 90px;
   display: grid;
   grid-template-rows: min-content;
   gap: var(--_spacer);
@@ -50,7 +50,7 @@
 }
 
 /* general styling */
-#wardrobe .container {
+.container {
     inline-size: min(100% - 4rem, 70rem);
     margin-inline: auto;
   }
@@ -61,15 +61,32 @@
 }
 
 .image-container {
+    /* position: absolute; */
+    top: 90px;
+    bottom: 20px;
     right: 260px;
-    height: 540px;
+    height: 340px;
     width: 375px;
     padding: var(--size-3, 1rem);
+    /* border: 2px solid var(--pink, #e682de); */
+    /* box-shadow: var(--shadow-2); */
     overflow: auto;
 }
 
 #shirtWrapper {
     margin-bottom: 1rem; /* Adjust value as needed */
+}
+
+#inside {
+  background-image: url('../assets/image.png');
+  background-size: 79%;          /* Makes the image cover the whole area */
+  background-position: center;     /* Centers the image */
+  background-repeat: no-repeat;    /* Prevents the image from repeating */
+  display: flex;
+  padding: 0 35px;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 .background {

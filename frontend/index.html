@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="wardrobe.css">
   <link rel="stylesheet" href="carousel.css">
+  <link rel="stylesheet" href="mirror.css">
   <meta charset="UTF-8">
   <title>Shirt & Pants on a Person</title>
 </head>
@@ -93,8 +94,80 @@
   </div>
 </div>
 
+<div id="divider">
+    <img src="assets/divider.png">
+  </div>
+
 <div id="mirror">
-  
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MediaPipe Video Stream</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    #videoStream {
+      width: 640px;
+      height: 480px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>MediaPipe Video Stream</h1>
+  <img id="videoStream" src="" alt="Video stream will appear here" />
+  <div>
+    <button onclick="startCamera()">Start Camera</button>
+    <button onclick="stopCamera()">Stop Camera</button>
+  </div>
+
+  <!-- Socket.IO client library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"></script>
+  <script>
+    // Connect to the backend (assumes same host and port 5000)
+    const socket = io();
+
+    socket.on('connect', () => {
+      console.log('Connected to the Flask SocketIO backend.');
+    });
+
+    // Listen for 'frame' events from the backend and update the video stream image
+    socket.on('frame', (data) => {
+      const imgElement = document.getElementById('videoStream');
+      // Prepend the base64 string with the appropriate data URL prefix.
+      imgElement.src = 'data:image/jpeg;base64,' + data.image;
+    });
+
+    // Function to start the camera stream by calling the backend endpoint
+    function startCamera() {
+      // Variant can be 'angle' (or any other your backend supports)
+      fetch('/start_camera/angle')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error starting camera:', error));
+    }
+
+    // Function to stop the camera stream by calling the backend endpoint
+    function stopCamera() {
+      fetch('/stop_camera')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error stopping camera:', error));
+    }
+  </script>
+</body>
+
 </div>
 
   <!-- Import Socket.io from CDN -->

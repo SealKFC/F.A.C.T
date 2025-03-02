@@ -1,0 +1,118 @@
+/* Base styles for the Models Page */
+.models-page {
+  padding: 2rem;
+  background: #194a7a;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.models-header {
+  display: flex;
+  background: #476f95;
+  border-radius: 6px;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.back-button {
+  padding: 0.5rem 1rem;
+  background: #194a7a;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+/* Grid styling: 1 row x 3 columns */
+.models-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  width: 90vw;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Model Card */
+.model-card {
+  background: #476f95;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  aspect-ratio: 1;
+  max-height: 100%;
+  overflow: hidden;
+  position: relative; /* Allows absolutely positioned children to be placed inside */
+}
+
+/* Thumbnail */
+.model-thumbnail {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Button group overlay */
+.button-group {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+/* Individual buttons */
+.model-button {
+  padding: 0.5rem 1rem;
+  background: #194a7a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Video Overlay */
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.video-overlay-content {
+  position: relative;
+  background: #476f95;
+  padding: 1rem;
+  border-radius: 0px;
+  width: 100%;
+  max-width: 850px;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.close-overlay {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #242424;
+  cursor: pointer;
+}
