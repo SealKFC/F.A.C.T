@@ -155,6 +155,7 @@ function saveShirt() {
         console.log("Pattern saved");
         document.getElementById('shirt_image').src = 'assets/white-shirt.png';
         document.getElementById("shirt_image").style.opacity = 0.5;
+        fetchShirts();
     })
     .catch((error) => {
         console.log("Error saving pattern");
@@ -167,6 +168,7 @@ function savePants() {
             console.log("Pattern saved");
             document.getElementById('pants_image').src = 'assets/white-pants.png';
             document.getElementById("pants_image").style.opacity = 0.5;
+            fetchPants();
         })
         .catch((error) => {
             console.log("Error saving pattern");

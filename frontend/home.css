@@ -16,13 +16,13 @@ html {
     width: 600px;
     margin-top: -50px; /* Moves everything up */
 }
-.image-container {
+.image-container-home {
     position: relative;
     display: inline-block;
    
      /* Moves only the pattern image to the right */
 }
-.image-container img {
+.image-container-home img {
     width: 100%; 
     margin-top: -50px;
     border-radius: 50%;
