@@ -1,6 +1,4 @@
-Live Demo:
-
-[![YouTube Video Thumbnail](https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg)](https://youtu.be/SJ7GUdQnaD4?si=u2go53Uzc2_XMdgo)
+Live Demo: https://youtu.be/SJ7GUdQnaD4?si=u2go53Uzc2_XMdgo
 
 # F.A.C.T
 Fashion, Aesthetics, Creativity, Technology
